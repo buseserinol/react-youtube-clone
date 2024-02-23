@@ -28,3 +28,34 @@ body {
   background: gray;
   border-radius: 15px;
 }
+
+.detail-page {
+  display: grid;
+  grid-template-columns: auto 600px;
+}
+
+@media (max-width: 1000px) {
+  .detail-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 150px auto;
+  gap: 20px;
+  align-items: center;
+}
+
+.row .c-pic {
+  display: none;
+}
+
+/* .row .v-pic {
+  width: 150px;
+  height: 80px;
+} */
+
+.row .view-detail p:nth-child(1) span:nth-child(2) {
+  display: none;
+}

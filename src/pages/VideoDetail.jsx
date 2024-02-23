@@ -5,15 +5,16 @@ import { useState } from "react";
 import ReactPlayer from "react-player";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 import millify from "millify";
+import StringArea from "../components/StringArea.jsx";
+import Loader from "../components/Loader.jsx";
+import VideoCard from "../components/VideoCard.jsx";
 
 const VideoDetail = () => {
   const [video, setVideo] = useState(null);
-  console.log(video);
   //! arama parametresine erişim için kurulum
   const [searchParams] = useSearchParams();
   //! url'den 'v' isimli arama parametresini al
   const id = searchParams.get("v");
-  // console.log(id);
 
   //! id'si bilinen videonun bilgilerini api'dan al
   useEffect(() => {
@@ -21,7 +22,7 @@ const VideoDetail = () => {
   }, [searchParams]);
 
   return (
-    <div className=" detail-page h-screen overflow-auto p-5">
+    <div className="detail-page h-screen overflow-auto p-5">
       {/*video içeriği */}
       <div>
         <ReactPlayer
@@ -76,13 +77,25 @@ const VideoDetail = () => {
                 <p>{millify(video.viewCount)} Görüntülenme</p>
                 <p>{new Date(video.publishDate).toLocaleDateString()}</p>
               </div>
+              <StringArea text={video.description} />
             </div>
           </>
         )}
       </div>
 
       {/*alakalı içerikler */}
-      <div></div>
+      <div className="flex flex-col p-6 gap-5">
+        {!video ? (
+          <Loader />
+        ) : (
+          video.relatedVideos.data.map(
+            (item) =>
+              item.type === "video" && <VideoCard video={item} isRow={true} />
+          )
+        )}
+      </div>
+
+      {/* BURAYA YORUMLAR KISMI GELECEK */}
     </div>
   );
 };
