@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 const Feed = () => {
   const { videos } = useContext(VideoContext);
   return (
-    <div className="flex gap-5  ">
+    <div className="flex">
       <SideBar />
       <div className="videos">
         {!videos ? (

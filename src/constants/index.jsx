@@ -4,9 +4,10 @@ import { CgMusicNote } from "react-icons/cg";
 import { FiFilm } from "react-icons/fi";
 import { IoGameControllerSharp } from "react-icons/io5";
 import { ImNewspaper } from "react-icons/im";
-import { GiDiamondTrophy, GiEclipse } from "react-icons/gi";
+import { GiEclipse } from "react-icons/gi";
 import { RiLightbulbLine, RiFeedbackLine } from "react-icons/ri";
 import { FiSettings, FiHelpCircle } from "react-icons/fi";
+import { TfiCup } from "react-icons/tfi";
 
 // Kategoriler
 export const categories = [
@@ -35,7 +36,7 @@ export const categories = [
   },
   {
     name: "Spor",
-    icon: <GiDiamondTrophy />,
+    icon: <TfiCup />,
     type: "category",
   },
   {

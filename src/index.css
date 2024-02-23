@@ -14,9 +14,9 @@ body {
   gap: 50px;
   height: 100vh;
   overflow: auto;
-  grid-template-columns: repeat(auto-fit, minMax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   justify-content: center;
-  padding: 10px;
+  padding: 20px;
 }
 
 .videos::-webkit-scrollbar {
