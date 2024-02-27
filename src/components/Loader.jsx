@@ -6,9 +6,9 @@ const Loader = () => {
         <div>
           <div
             role="status"
-            class="max-w-sm p-4 rounded shadow animate-pulse md:p-6 border-gray-700"
+            class="max-w-md p-4 rounded shadow animate-pulse md:p-6 border-gray-700"
           >
-            <div class="flex items-center justify-center h-52 w-full mb-4 rounded bg-gray-700"></div>
+            <div class="flex items-center justify-center h-80 w-full mb-4 rounded bg-gray-700"></div>
 
             <div class="flex items-center mt-4">
               <svg

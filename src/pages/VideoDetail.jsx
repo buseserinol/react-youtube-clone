@@ -1,32 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getData } from "../helpers.jsx/getData";
-import { useState } from "react";
+import { getData } from "../helpers/getData.jsx";
 import ReactPlayer from "react-player";
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+import Loader from "../components/Loader";
+import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import millify from "millify";
-import StringArea from "../components/StringArea.jsx";
-import Loader from "../components/Loader.jsx";
-import VideoCard from "../components/VideoCard.jsx";
+import StringArea from "../components/StringArea";
+import VideoCard from "../components/VideoCard";
+import Comments from "../components/Comments";
+import LoaderComment from "../components/LoaderComment.jsx";
 
 const VideoDetail = () => {
   const [video, setVideo] = useState(null);
-  //! arama parametresine erişim için kurulum
+  const [comments, setComments] = useState(null);
+
+  //1) arama parametresine erisim icin kurulum
   const [searchParams] = useSearchParams();
-  //! url'den 'v' isimli arama parametresini al
+
+  //2) url'den v isimli arama parametresini al
   const id = searchParams.get("v");
 
-  //! id'si bilinen videonun bilgilerini api'dan al
+  //3) idsi bilinen videonun bilgilerini api'den al
   useEffect(() => {
     getData(`/video/info?id=${id}&extend=1`).then((data) => setVideo(data));
+    getData(`/comments?id=${id}`).then((res) => setComments(res.data));
   }, [searchParams]);
-
   return (
     <div className="detail-page h-screen overflow-auto p-5">
-      {/*video içeriği */}
+      {/*Video icerigi */}
       <div>
         <ReactPlayer
-          className={"rounded cursor-pointer"}
+          className={"rounded"}
           width={"100%"}
           height={"50vh"}
           // light
@@ -34,57 +38,71 @@ const VideoDetail = () => {
           controls
           url={`https://www.youtube.com/watch?v=${id}`}
         />
-
         {!video ? (
-          <p>Yükleniyor..</p>
+          <Loader />
         ) : (
           <>
-            {/* başlık */}
             <h1 className="my-3 text-xl font-bold">{video.title}</h1>
-            {/* kanal bilgileri */}
             <div className="flex justify-between">
-              {/* sol */}
-              <div className="flex  items-center gap-4">
+              {/*sol*/}
+
+              <div className="flex item-center gap-4">
                 <img
-                  className="rounded-full w-12 h-12"
+                  className="rounded-full"
                   src={video.channelThumbnail[0].url}
-                  alt="channel thumbnail"
+                  alt=""
                 />
                 <div>
                   <h4 className="font-bold">{video.channelTitle}</h4>
                   <p className="text-gray-400">{video.subscriberCountText}</p>
                 </div>
-
-                <button className="px-3 rounded-full bg-white text-black h-9 transition hover:bg-gray-400">
-                  Abone Ol
+                <button className="bg-white rounded-full text-black px-3 h-9 transition hover:bg-gray-400">
+                  Abone ol
                 </button>
               </div>
+              {/*sag*/}
 
-              {/* sağ */}
-              <div className="flex items-center bg-[#272727] rounded-full cursor-pointer">
-                <div className="flex items-center gap-4 py-2 px-4 border-r">
-                  <AiOutlineLike />
+              <div className="flex items-center bg-[#272727] rounded-full cursor-pointer  ">
+                <div className="flex items-center gap-4 py-2 px-4 border-r transition ">
+                  <AiFillLike />
                 </div>
                 <div className="py-2 px-4">
-                  <AiOutlineDislike />
+                  <AiFillDislike />
                 </div>
               </div>
+              {/*aciklama*/}
             </div>
-            {/* video bilgileri */}
-
             <div className="bg-[#272727] rounded p-2 mt-4 cursor-pointer hover:bg-opacity-80">
               <div className="flex gap-3">
-                <p>{millify(video.viewCount)} Görüntülenme</p>
+                <p>{millify(video.viewCount)} görüntüleme </p>
                 <p>{new Date(video.publishDate).toLocaleDateString()}</p>
               </div>
               <StringArea text={video.description} />
             </div>
+            <div className="font-bold mt-5 ml-5">
+              <p>
+                {video.commentCountText == null || video.commentCountText === 0
+                  ? ""
+                  : video.commentCountText + " Yorum"}
+              </p>
+            </div>
           </>
         )}
+        {/* Yorumlar */}
+        <div className="flex flex-col gap-3 my-6">
+          {!comments ? (
+            <LoaderComment />
+          ) : (
+            comments.map((comment) => (
+              <Comments key={comment.commentId} comment={comment} />
+            ))
+          )}
+        </div>
       </div>
 
-      {/*alakalı içerikler */}
-      <div className="flex flex-col p-6 gap-5">
+      {/*Alakali videolar */}
+
+      <div className="flex gap-5  flex-col p-1 sm:p-6 max-sm:mt-6">
         {!video ? (
           <Loader />
         ) : (
@@ -94,8 +112,6 @@ const VideoDetail = () => {
           )
         )}
       </div>
-
-      {/* BURAYA YORUMLAR KISMI GELECEK */}
     </div>
   );
 };
